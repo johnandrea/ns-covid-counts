@@ -19,7 +19,7 @@ shorter_phrase = re.compile( r'.*of those, (.*) people are in hospital, includin
 
 def get_numbers( m ):
     # given a regex match, return exit status option
-    # if matched, the print the two numbers
+    # if matched, then print the two numbers
 
     result = 0
 
@@ -32,7 +32,7 @@ def get_numbers( m ):
           result = 1
     else:
        result = 1
-       print( 'didnt convert:', data )
+       print( 'didnt convert' )
 
     return result
 
