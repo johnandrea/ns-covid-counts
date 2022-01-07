@@ -10,9 +10,9 @@
 # 1 = file of already handled urls
 # 2 = dir to hold output text
 
-from bs4 import BeautifulSoup, SoupStrainer
-import requests
 import sys
+from bs4 import BeautifulSoup
+import requests
 
 
 def only_numbers( s ):
