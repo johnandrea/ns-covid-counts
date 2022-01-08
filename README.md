@@ -13,3 +13,21 @@ find canada-hospital/ns/archive/ -mtime +30 -type f -name "*sql" -print -delete
 ```
 
 I'm still hunting for data from the other provinces.
+
+## Matches ##
+
+This code currently matches on these phrases
+```
+There are 48 people in hospital with nine in ICU.
+Of those, 34 people are in hospital, including 4 in ICU.
+```
+
+Previously used phrases are not matched
+```
+There are currently no hospitalizations.
+Of those, three people are in hospital COVID-19 units, including one in ICU.
+
+Of those, one person is in ICU.
+Of those, one person is in a hospital COVID-19 unit.
+Of those, four people are in hospital COVID-19 units.
+```
