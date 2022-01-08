@@ -24,10 +24,18 @@ Of those, 34 people are in hospital, including 4 in ICU.
 
 Previously used phrases are not matched
 ```
+No one is in hospital.
 There are currently no hospitalizations.
-Of those, three people are in hospital COVID-19 units, including one in ICU.
+
+One person is in hospital.
+One person is currently in hospital, in ICU.
 
 Of those, one person is in ICU.
 Of those, one person is in a hospital COVID-19 unit.
 Of those, four people are in hospital COVID-19 units.
+Of those, three people are in hospital COVID-19 units, including one in ICU.
+
+Two people are currently in hospital, in ICU.
+Two people are currently in hospital, in ICU.
+Two people are currently in hospital. Of those, one is in ICU.
 ```
