@@ -1,20 +1,20 @@
 #!/usr/bin/python3
 
-# Copyright 2022 (c) John Andrea
-# Released under MIT License.
-# No support implied.
-#
-# v1.0
-
 import sys
 import re
 from word2number import w2n
 
+patterns = []
+
 # There are 40 people in hospital with five in ICU
-full_phrase = re.compile( r'.*there are (.*) people in hospital with (.*) in icu' )
+pattern = 'there are ([^\\.]+) people in hospital with ([^\\.]+) in icu'
+
+patterns.append( re.compile( '.*' + pattern.lower() ) )
 
 # Of those, 34 people are in hospital, including 4 in ICU.
-shorter_phrase = re.compile( r'.*of those, (.*) people are in hospital, including (.*) in icu' )
+pattern = 'of those, ([^\\.]+) people are in hospital, including ([^\\.]+) in icu'
+
+patterns.append( re.compile( '.*' + pattern.lower() ) )
 
 
 def get_numbers( m ):
@@ -37,26 +37,26 @@ def get_numbers( m ):
     return result
 
 
-input = ''
-
+data = ''
 for line in sys.stdin:
-    input += ' ' + line.strip().lower()
+    data += ' ' + line
 
-text = input.replace( '  ', ' ' ).replace( '  ', ' ' ).strip()
+text = data.lower().replace( '\t', ' ' )
+text = text.replace( '\n', ' ' ).replace( '\r', ' ' )
+text = text.replace( '  ', ' ' ).strip()
 
 status = 0
+found = False
 
-m = full_phrase.match( text )
-if m:
-  status = get_numbers( m )
+for pattern in patterns:
+    if not found:
+       m = pattern.match( text )
+       if m:
+          found = True
+          status = get_numbers( m )
 
-else:
-  m = shorter_phrase.match( text )
-  if m:
-    status = get_numbers( m )
-
-  else:
-    # didn't match, return failure so that the input file will not be removed
-    status = 1
+if not found:
+   # didn't match, return failure so that the input file will not be removed
+   status = 1
 
 sys.exit( status )
