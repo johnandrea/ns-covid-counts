@@ -56,7 +56,6 @@ def handle_page( url, data_dir ):
 
       print( 'checking for time' )
       for link in soup.findAll('time'):
-          text = link.text
           ref = link.get('datetime')
           parts = ref.split( 'T' )
           if '20' in parts[0]:
