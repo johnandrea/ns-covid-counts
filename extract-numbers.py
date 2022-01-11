@@ -7,12 +7,12 @@ from word2number import w2n
 patterns = []
 
 # There are 40 people in hospital with five in ICU
-pattern = 'there are ([^\\.]+) people in hospital with ([^\\.]+) in icu'
+pattern = 'there are (.+?) people in hospital with (.+?) in icu'
 
 patterns.append( re.compile( '.*' + pattern.lower() ) )
 
 # Of those, 34 people are in hospital, including 4 in ICU.
-pattern = 'of those, ([^\\.]+) people are in hospital, including ([^\\.]+) in icu'
+pattern = 'of those, (.+?) people are in hospital, including (.+?) in icu'
 
 patterns.append( re.compile( '.*' + pattern.lower() ) )
 
