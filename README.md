@@ -5,14 +5,6 @@ The counts for hospitalization and ICU in Nova Scotia are not made available thr
 
 This code, run daily, looks at the new reports, attempts to extract the counts, and prepares sql statements for insertion into my database at http://data19.johnandrea.ca. It will fail if the phrases used to describe the counts change. The body of unmatched reports will be left in the data directory for human review.
 
-A cleanup should be performed on the archive directory so that it doesn't grow without limit. I'm using (also daily):
-```
-find canada-hospital/ns/archive/ -mtime +30 -type f -name "*txt" -print -delete
-find canada-hospital/ns/archive/ -mtime +30 -type f -name "*sql" -print -delete
-
-```
-
-I'm still hunting for data from the other provinces.
 
 ## Matches ##
 
