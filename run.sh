@@ -1,112 +1,89 @@
 #!/bin/bash
 
-# Copyright 2022 (c) John Andrea
-# Released under MIT License.
-# No support implied.
-#
-# v1.0
+url="https://novascotia.ca/news/search/?dept=180"
+prov="ns"
 
-table="canada"
-subselect="(select id from province_names where name='Nova Scotia')"
-where="where name_id=$subselect"
-noerror="on conflict do nothing"
-q="'"
-
-export PGPASSWORD="PASSWORD"
+date
 
 here=${0%/*}
 
+cd $here
+mkdir failed 2>/dev/null
+mkdir data 2>/dev/null
+
 already=$here/already.dat
-
-datadir=$here/data
-archive=$here/archive
-
 touch $already
-mkdir -p $datadir 2>/dev/null
-mkdir -p $archive 2>/dev/null
 
-tmpfile=$here/tmp.tmp
+top=data/top-data.html
+links=data/data.links
+tsv=data/data.tsv
+data=data/data.html
 
-# produce body of web press releases
-# named with the date and time of the release  date underscore time .body.txt
+echo getting top page
+if wget -k -nv -O $top $url
+then
+  if ./get-links.py $already <$top >$links
+  then
 
-$here/get-text.py $already $datadir
+    echo
+    echo getting pages
 
-ls -1 "$datadir" | grep body.txt |
-while read file; do
-   echo checking for counts in $file
+    # append to tsv output because of multiple links
+    echo -n >$tsv
 
-   infile="$datadir/$file"
+    cat $links |
+    while read link; do
 
-   # the prase "people in hospital" is needed
+       echo
+       echo getting release
 
-   if cat $infile | tr '\n' ' ' | grep -i "in  *hospital" >/dev/null
-   then
+       if wget -nv -O $data "$link"
+       then
 
-      date=$(echo $file | cut -f1 -d_)
-      outfile="$here/counts.tmp"
+          if ./page-to-tsv.py <$data >>$tsv
+          then
+             echo $link >>$already
+          else
 
-      # failure could mean that the sentence pattern did not match
-      # look at the data file for the sentence
-
-      if $here/extract-numbers.py  <$infile  >$outfile
-      then
-
-         # must have two numbers separated by a space
-         # 123 455   or  3 72   or  82 7
-         # but if it doesn't still could be a problem with the sentence
-
-         cat $outfile |
-         tr '\t' ' ' |
-         tr -s ' ' | sed 's/^ //' | sed 's/ $//' |
-         grep "[0-9] [0-9]" >$tmpfile
-
-         # take the 'tail' because the province wide numbers seem to be listed last
-
-         if [ -s "$tmpfile" ]; then
-            first=$(tail -1 $tmpfile | cut -f1 -d" ")
-            second=$(tail -1 $tmpfile | cut -f2 -d" ")
-
-            insert=$here/latest.insert
-            sql=$here/$file.sql
-            err=$here/$file.err
-
-            echo "\\c covid19" >$sql
-            echo "insert into $table (datatime,name_id) values ($q$date$q,$subselect) $noerror;" >>$sql
-            echo "update $table set hospital=$first,icu=$second $where and datatime=$q$date$q;" >>$sql
-
-            # leave a copy of the sql right here for checking format, etc
-            cp $sql $here/latest.sql
-
-            if /usr/bin/psql -U DBUSER -d covid19 -f $sql >$insert 2>$err
+            if grep -i hospital $data >/dev/null
             then
-              # all done with the web page
-              mv $sql $archive
-              mv $infile $archive
-              rm -f $err
+              # maybe, because it contains that word, just the pattern changed
+              sleep 1
+              now=$(date '+%Y%m%d-%H%M%S')
+              echo saving to failed location
+              cp $data failed/$now.html
+              echo $link > failed/$now.link
+
             else
-              if [ -a $err ]; then
-                if [ -s $err ]; then
-                  echo check $err
-                else
-                  rm -f $err
-                fi
-              fi
+              echo failed tsv, no hospital word
             fi
-
-            cat $insert
-
           fi
 
-          # leave a non-unique copy of the numbers right here for checking
-          mv $tmpfile $here/latest.counts
-      fi
+       else
+          # to try again later, check against "already" list
+          echo getting data page failed
+          now=$(date '+%Y%m%d')
+          echo saving link to failed
+          echo $link >> failed/$now.links
+       fi
+    
+    done
 
-      rm -f $outfile
-   else
+    if $here/../common/run.sh $prov $here/data
+    then
+      :
+    else
+      echo failed database
+      # why did this fail? and how can it be recovered
+      now=$(date '+%Y%m%d')
+      cp $tsv failed/$now.tsv      
+    fi
 
-     echo no word hospital
-     rm -f $infile
-   fi
+  else
+     echo link collection failed
+  fi
+else
+  echo wget failed
+fi
 
-done
+date
