@@ -69,7 +69,7 @@ then
     
     done
 
-    if $here/../common/run.sh $prov $here/data
+    if $here/common/run.sh $prov $here/data
     then
       :
     else
