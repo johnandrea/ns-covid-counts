@@ -83,6 +83,7 @@ def fix_date( d, months ):
     return result
 
 
+
 def fix_number( given ):
     result = None
     if given == 'null':
@@ -90,7 +91,11 @@ def fix_number( given ):
     elif given == '':
        result = 'null'
     else:
-       result = w2n.word_to_num( given )
+       try:
+          result = w2n.word_to_num( given )
+       except ValueError:
+          print( 'WARNING - non-numeric found:', given, file=sys.stderr )
+          result = None
     return result
 
 
