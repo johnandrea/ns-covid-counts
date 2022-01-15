@@ -83,6 +83,18 @@ def fix_date( d, months ):
     return result
 
 
+def fix_number( given ):
+    result = None
+    if given == 'null':
+       result = given
+    elif given == '':
+       result = 'null'
+    else:
+       result = w2n.word_to_num( given )
+    return result
+
+
+
 if len( sys.argv ) < 4:
    print( 'args: dbname province-key oldestdate', file=sys.stderr )
    sys.exit( 1 )
@@ -121,12 +133,12 @@ for line in sys.stdin:
              # sometimes field missing
              hosp = 'null'
              if len(parts) > 1:
-                x = w2n.word_to_num( parts[1] )
+                x = fix_number( parts[1] )
                 if x is not None:
                    hosp = x
              icu = 'null'
              if len(parts) > 2:
-                x = w2n.word_to_num( parts[2] )
+                x = fix_number( parts[2] )
                 if x is not None:
                    icu = x
 
