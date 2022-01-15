@@ -3,7 +3,7 @@
 out=lint.log
 echo -n >$out
 
-for file in *py
+for file in *py; do
     pylint $file |
     grep -v bad-indentation |
     grep -v "conform to snake_case naming" |
@@ -12,5 +12,6 @@ for file in *py
     grep -vi "conform to UPPER_CASE naming" |
     grep -v missing-module-docstring |
     cat >>$out
+done
 
 cat $out
