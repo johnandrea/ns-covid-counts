@@ -36,6 +36,7 @@ then
 
        echo
        echo getting release
+       rm -f $data 2>/dev/null
 
        if wget -nv -O $data "$link"
        then
@@ -45,6 +46,10 @@ then
              echo $link >>$already
           else
 
+            echo
+            echo lines in data
+            wc -l $data
+            
             if grep -i hospital $data >/dev/null
             then
               # maybe, because it contains that word, just the pattern changed
