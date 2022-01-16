@@ -24,6 +24,7 @@ def run_test( s ):
 
 run_test( '5' )
 run_test( 'five' )
+run_test( 'zero' )
 run_test( '' )
 run_test( 'null' )
 run_test( 'nothing' )
