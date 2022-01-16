@@ -11,6 +11,19 @@ from bs4 import BeautifulSoup
 
 patterns = []
 
+#<p>Today, January 15, Nova Scotia is reporting 58 people in hospital who were admitted due to COVID-19 and are receiving specialized care in a COVID-19 designated unit.</p>
+#<p>Ten people are in ICU today.
+# editing out para tags
+#Nova Scotia is reporting 58 people in hospital who were admitted due
+# to COVID-19 and are receiving specialized care in a COVID-19 designated unit.
+# Ten people are in ICU today.
+
+pattern = 'Nova Scotia is reporting ([^\\.]+?) people in hospital who were admitted due'
+pattern += ' to COVID-19 and are receiving specialized care in a COVID-19 designated unit\\.'
+pattern += ' ([^\\.]+?) people are in ICU today\\.'
+
+patterns.append( re.compile( '.*' + pattern.lower() ) )
+
 # There are 40 people in hospital with five in ICU
 pattern = 'there are ([^\\.]+) people in hospital with ([^\\.]+) in icu'
 
@@ -36,6 +49,7 @@ french_words = []
 french_words.append( "Aujourd\'hui" )
 french_words.append( "Aujourd’hui" )
 french_words.append( "sont aux soins intensifs" )
+
 
 def get_date( data ):
 
@@ -66,6 +80,7 @@ d = get_date( data.lower() )
 if d:
 
    search_data = data.lower().replace('\n',' ').replace('\r',' ')
+   search_data = search_data.replace('<p>', ' ' ).replace('</p>', ' ')
    search_data = search_data.replace('\t',' ')
    search_data = search_data.replace('  ',' ')
    search_data = search_data.replace('  ',' ').strip()
