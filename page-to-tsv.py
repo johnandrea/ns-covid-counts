@@ -81,9 +81,7 @@ if d:
 
    search_data = data.lower().replace('\n',' ').replace('\r',' ')
    search_data = search_data.replace('<p>', ' ' ).replace('</p>', ' ')
-   search_data = search_data.replace('\t',' ')
-   search_data = search_data.replace('  ',' ')
-   search_data = search_data.replace('  ',' ').strip()
+   search_data = re.sub(r'\s+',' ',search_data).strip()
 
    # skip a page which is french
    for word in french_words:
