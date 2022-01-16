@@ -86,13 +86,19 @@ def fix_date( d, months ):
 
 def fix_number( given ):
     result = None
-    if given == 'null':
+
+    # remove possible hundreds separator
+    number = given.replace(',','').strip().lower()
+
+    if number == 'null':
        result = given
-    elif given == '':
+    elif number == '':
        result = 'null'
+    elif number in ['none','no one','noone','no-one']:
+       result = 0
     else:
        try:
-          result = w2n.word_to_num( given )
+          result = w2n.word_to_num( number )
        except ValueError:
           print( 'WARNING - non-numeric found:', given, file=sys.stderr )
           result = None
@@ -120,7 +126,7 @@ for line in sys.stdin:
     if line:
        parts = line.split( '\t' )
 
-       d = fix_date( parts[0], months )
+       d = fix_date( parts[0].strip(), months )
 
        if d:
           if date_newer_than( oldest_date, d ):
