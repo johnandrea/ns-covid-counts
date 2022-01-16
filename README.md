@@ -30,3 +30,7 @@ Of those, three people are in hospital COVID-19 units, including one in ICU.
 Two people are currently in hospital, in ICU.
 Two people are currently in hospital. Of those, one is in ICU.
 ```
+
+## Support ##
+
+This code is provided with no support.
