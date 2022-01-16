@@ -8,7 +8,7 @@ This code, run daily, looks at the new reports, attempts to extract the counts, 
 
 ## Matches ##
 
-This code currently matches on these phrases
+This code currently matches on these phrases (and more)
 ```
 There are 48 people in hospital with nine in ICU.
 Of those, 34 people are in hospital, including 4 in ICU.
