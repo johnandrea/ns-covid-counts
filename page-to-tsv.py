@@ -34,7 +34,8 @@ patterns.append( re.compile( '.*' + pattern.lower() ) )
 # use these words to try and detect if the page is french
 french_words = []
 french_words.append( "Aujourd\'hui" )
-
+french_words.append( "Aujourd’hui" )
+french_words.append( "sont aux soins intensifs" )
 
 def get_date( data ):
 
