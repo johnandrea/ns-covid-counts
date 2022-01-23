@@ -7,20 +7,20 @@ import sys
 import re
 from bs4 import BeautifulSoup
 
+# all cases so far have hospitalized count first, icu second
+
 # these patterns need to stop on sentences (.), not just non-greedy strings
 
 patterns = []
 
-#<p>Today, January 15, Nova Scotia is reporting 58 people in hospital who were admitted due to COVID-19 and are receiving specialized care in a COVID-19 designated unit.</p>
-#<p>Ten people are in ICU today.
-# editing out para tags
-#Nova Scotia is reporting 58 people in hospital who were admitted due
-# to COVID-19 and are receiving specialized care in a COVID-19 designated unit.
-# Ten people are in ICU today.
+#<p>Today, January 15, Nova Scotia is reporting 58 people in hospital
+# who were admitted due to COVID-19 and are receiving specialized care
+# in a COVID-19 designated unit.</p> <p>Ten people are in ICU today.
 
-pattern = 'Nova Scotia is reporting ([^\\.]+?) people in hospital who were admitted due'
-pattern += ' to COVID-19 and are receiving specialized care in a COVID-19 designated unit\\.'
-pattern += ' ([^\\.]+?) people are in ICU today\\.'
+pattern = 'Nova Scotia is reporting ([^\\.]+?) people in hospital'
+pattern += ' who were admitted due to COVID-19 and are receiving specialized'
+pattern += ' care in a COVID-19 designated unit\\.'
+pattern += ' ([^\\.]+?) people are in ICU'
 
 patterns.append( re.compile( '.*' + pattern.lower() ) )
 
