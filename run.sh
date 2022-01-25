@@ -43,9 +43,11 @@ then
 
           if ./page-to-tsv.py <$data >>$tsv
           then
-             echo $link >>$already
+            echo $link >>$already
           else
 
+            # might as well always mark it as already handled
+            echo $link >>$already
             echo
             echo lines in data
             wc -l $data
